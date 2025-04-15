@@ -1,5 +1,5 @@
-const TMDB_API_KEY = '4d124bc44556e07fcb899d2948d365a2'; // Replace with your actual API key
-const OMDB_API_KEY = 'd8452679'; // Replace with your actual API key
+const TMDB_API_KEY = '4d124bc44556e07fcb899d2948d365a2';
+const OMDB_API_KEY = 'd8452679';
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 const TMDB_IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/';
 const OMDB_BASE_URL = 'https://www.omdbapi.com/';
@@ -20,11 +20,6 @@ export async function fetchTrendingMovies(timeWindow = 'week') {
   }
 }
 
-/**
- * Searches for movies based on query string
- * @param {string} query - Search term
- * @returns {Promise<Array>} - Array of movie objects matching search
- */
 export async function searchMovies(query) {
   if (!query || query.trim() === '') {
     return [];
@@ -54,7 +49,6 @@ export async function fetchMovieDetails(movieId) {
       throw new Error(tmdbData.status_message || 'Failed to fetch movie details');
     }
 
-    // Fetch additional details from OMDB using IMDB ID
     let omdbData = null;
     if (tmdbData.imdb_id) {
       const omdbResponse = await fetch(`${OMDB_BASE_URL}?apikey=${OMDB_API_KEY}&i=${tmdbData.imdb_id}`);

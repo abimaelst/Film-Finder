@@ -222,10 +222,6 @@ function renderTrailer(trailer) {
   }
 }
 
-/**
- * Renders the cast section
- * @param {Array} cast - Array of cast member objects
- */
 function renderCast(cast) {
   const castList = document.getElementById('cast-list');
 
