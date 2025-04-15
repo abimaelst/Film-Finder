@@ -1,46 +1,29 @@
-/**
- * MovieList.mjs - Handles rendering lists of movies and search functionality
- * 
- * This module is responsible for rendering movie lists, search results,
- * and managing the homepage functionality.
- */
-
 import {
   fetchTrendingMovies,
   searchMovies,
   fetchGenres,
   fetchMoviesByGenre,
   fetchRandomMovie
-} from './movieData.mjs';
+} from './MovieData.mjs';
 import { getRecentlyViewed, setupSearchFunctionality } from './utils.mjs';
 
-// State for filtered movie section
 let currentPage = 1;
 let totalPages = 1;
 let currentGenres = [];
 let currentFilters = {};
 
-/**
-* Initializes the home page functionality
-*/
 export async function initHome() {
   try {
-    // Set up search functionality
     setupSearchFunctionality();
 
-    // Load trending movies
     await loadTrendingMovies();
 
-    // Load genre buttons
     await loadGenreButtons();
 
-    // Load recently viewed movies
     loadRecentlyViewedMovies();
 
-    // Set up surprise me button
     setupSurpriseMe();
 
-    // Set up filter controls
     setupFilterControls();
   } catch (error) {
     console.error('Error initializing home page:', error);
@@ -48,9 +31,6 @@ export async function initHome() {
   }
 }
 
-/**
-* Loads trending movies into the trending section
-*/
 async function loadTrendingMovies() {
   const trendingContainer = document.getElementById('trending-movies');
 
@@ -69,9 +49,6 @@ async function loadTrendingMovies() {
   }
 }
 
-/**
-* Loads genre buttons for filtering
-*/
 async function loadGenreButtons() {
   const genreContainer = document.getElementById('genre-filters');
 
@@ -87,30 +64,24 @@ async function loadGenreButtons() {
           <button class="genre-button" data-genre-id="${genre.id}">${genre.name}</button>
       `).join('');
 
-    // Add event listeners to genre buttons
     const genreButtons = document.querySelectorAll('.genre-button');
     genreButtons.forEach(button => {
       button.addEventListener('click', () => {
         const genreId = button.getAttribute('data-genre-id');
 
-        // Toggle active class
         button.classList.toggle('active');
 
-        // Update current genres
         if (button.classList.contains('active')) {
           currentGenres.push(genreId);
         } else {
           currentGenres = currentGenres.filter(id => id !== genreId);
         }
 
-        // Reset to page 1 when changing filters
         currentPage = 1;
 
-        // Load movies with selected genres
         if (currentGenres.length > 0) {
           loadMoviesByGenre();
         } else {
-          // Hide filtered section if no genres selected
           const filteredSection = document.querySelector('.filtered-movies-section');
           filteredSection.classList.add('hidden');
         }
@@ -122,9 +93,6 @@ async function loadGenreButtons() {
   }
 }
 
-/**
-* Loads recently viewed movies
-*/
 function loadRecentlyViewedMovies() {
   const recentlyViewedContainer = document.getElementById('recently-viewed');
   const recentlyViewedSection = document.querySelector('.recently-viewed-section');
@@ -140,9 +108,6 @@ function loadRecentlyViewedMovies() {
   renderMovieCarousel(recentMovies, recentlyViewedContainer);
 }
 
-/**
-* Sets up the surprise me button functionality
-*/
 function setupSurpriseMe() {
   const surpriseButton = document.getElementById('surprise-me-button');
   const surpriseResult = document.getElementById('surprise-result');
@@ -153,7 +118,6 @@ function setupSurpriseMe() {
     surpriseResult.classList.add('hidden');
 
     try {
-      // Get filters from the filter controls
       const yearFilter = document.getElementById('year-filter');
       const ratingFilter = document.getElementById('rating-filter');
 
@@ -213,19 +177,16 @@ function setupFilterControls() {
     yearFilter.appendChild(option);
   }
 
-  // Add event listeners to filter controls
   const filterControls = document.querySelectorAll('#year-filter, #rating-filter, #sort-by');
   filterControls.forEach(control => {
     control.addEventListener('change', () => {
-      // Only apply filters if genres are selected
       if (currentGenres.length > 0) {
-        currentPage = 1; // Reset to page 1 when changing filters
+        currentPage = 1;
         loadMoviesByGenre();
       }
     });
   });
 
-  // Set up pagination controls
   const prevPageButton = document.getElementById('prev-page');
   const nextPageButton = document.getElementById('next-page');
 
@@ -244,9 +205,6 @@ function setupFilterControls() {
   });
 }
 
-/**
-* Loads movies filtered by selected genres and other filters
-*/
 async function loadMoviesByGenre() {
   if (currentGenres.length === 0) return;
 
@@ -257,17 +215,14 @@ async function loadMoviesByGenre() {
   const prevPageButton = document.getElementById('prev-page');
   const nextPageButton = document.getElementById('next-page');
 
-  // Show loading state
   filteredSection.classList.remove('hidden');
   filteredMoviesContainer.innerHTML = '<div class="loading-spinner"></div>';
 
   try {
-    // Get filter values
     const yearFilter = document.getElementById('year-filter').value;
     const ratingFilter = document.getElementById('rating-filter').value;
     const sortBy = document.getElementById('sort-by').value;
 
-    // Map sort values to API parameters
     const sortMapping = {
       'popularity': 'popularity.desc',
       'rating': 'vote_average.desc',
@@ -281,23 +236,19 @@ async function loadMoviesByGenre() {
       minRating: ratingFilter
     };
 
-    // Update current filters for reference
     currentFilters = options;
 
     const result = await fetchMoviesByGenre(currentGenres, options);
 
     totalPages = result.totalPages;
 
-    // Update section title based on selected genres
     if (currentGenres.length === 1) {
-      // Find the genre name for the selected ID
       const genreButton = document.querySelector(`.genre-button[data-genre-id="${currentGenres[0]}"]`);
       sectionTitle.textContent = genreButton ? `${genreButton.textContent} Movies` : 'Movies';
     } else {
       sectionTitle.textContent = 'Filtered Movies';
     }
 
-    // Update pagination controls
     pageIndicator.textContent = `Page ${currentPage} of ${totalPages}`;
     prevPageButton.disabled = currentPage <= 1;
     nextPageButton.disabled = currentPage >= totalPages;
@@ -314,11 +265,6 @@ async function loadMoviesByGenre() {
   }
 }
 
-/**
-* Renders movies in a grid layout
-* @param {Array} movies - Array of movie objects
-* @param {HTMLElement} container - Container element to render into
-*/
 function renderMovieGrid(movies, container) {
   container.innerHTML = movies.map(movie => `
       <div class="movie-card">
@@ -336,11 +282,6 @@ function renderMovieGrid(movies, container) {
   `).join('');
 }
 
-/**
-* Renders movies in a horizontal carousel
-* @param {Array} movies - Array of movie objects
-* @param {HTMLElement} container - Container element to render into
-*/
 function renderMovieCarousel(movies, container) {
   container.innerHTML = movies.map(movie => `
       <div class="carousel-item">
@@ -358,10 +299,6 @@ function renderMovieCarousel(movies, container) {
   `).join('');
 }
 
-/**
-* Shows an error message on the page
-* @param {string} message - Error message to display
-*/
 function showErrorMessage(message) {
   const mainElement = document.querySelector('main');
   const errorDiv = document.createElement('div');
@@ -370,7 +307,6 @@ function showErrorMessage(message) {
 
   mainElement.prepend(errorDiv);
 
-  // Auto-remove after 5 seconds
   setTimeout(() => {
     errorDiv.remove();
   }, 5000);
