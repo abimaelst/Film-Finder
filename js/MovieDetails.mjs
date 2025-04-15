@@ -1,44 +1,26 @@
-/**
- * MovieDetails.mjs - Handles displaying detailed movie information
- * 
- * This module is responsible for rendering the detailed movie page,
- * including the movie information, trailer, cast, and similar movies.
- */
-
-import { fetchMovieDetails } from './movieData.mjs';
+import { fetchMovieDetails } from './MovieData.mjs';
 import { addToWatchlist, removeFromWatchlist, isInWatchlist, markAsWatched, isWatched } from './WatchlistManager.mjs';
 import { addToRecentlyViewed, setupSearchFunctionality } from './utils.mjs';
 
-/**
- * Loads and renders movie details for a given movie ID
- * @param {string} movieId - TMDB movie ID
- */
 export async function loadMovieDetails(movieId) {
   const detailsContainer = document.getElementById('movie-details-container');
   const loadingSpinner = document.getElementById('loading-spinner');
 
   try {
-    // Set up search functionality in the header
     setupSearchFunctionality();
 
     const movie = await fetchMovieDetails(movieId);
 
-    // Add to recently viewed
     addToRecentlyViewed(movie);
 
-    // Render movie details
     renderMovieDetails(movie);
 
-    // Render trailer if available
     renderTrailer(movie.trailer);
 
-    // Render cast
     renderCast(movie.cast);
 
-    // Render similar movies
     renderSimilarMovies(movie.similarMovies);
 
-    // Hide loading spinner
     loadingSpinner.classList.add('hidden');
   } catch (error) {
     console.error('Error loading movie details:', error);
@@ -53,26 +35,19 @@ export async function loadMovieDetails(movieId) {
   }
 }
 
-/**
- * Renders the main movie details section
- * @param {Object} movie - Movie details object
- */
 function renderMovieDetails(movie) {
   const detailsContainer = document.getElementById('movie-details-container');
   const inWatchlist = isInWatchlist(movie.id);
   const watched = isWatched(movie.id);
 
-  // Update page title
   document.title = `${movie.title} (${movie.releaseYear}) - FilmFinder`;
 
-  // Format runtime from minutes to hours and minutes
   const hours = Math.floor(movie.runtime / 60);
   const minutes = movie.runtime % 60;
   const formattedRuntime = hours > 0
     ? `${hours}h ${minutes > 0 ? `${minutes}m` : ''}`
     : `${minutes}m`;
 
-  // Format genres as comma-separated list
   const genresList = movie.genres.join(', ');
 
   detailsContainer.innerHTML = `
@@ -192,7 +167,6 @@ function renderMovieDetails(movie) {
         </div>
     `;
 
-  // Add event listeners for watchlist buttons
   if (inWatchlist) {
     document.getElementById('remove-watchlist').addEventListener('click', () => {
       removeFromWatchlist(movie.id);
@@ -226,10 +200,6 @@ function renderMovieDetails(movie) {
   }
 }
 
-/**
- * Renders the movie trailer section
- * @param {Object|null} trailer - Trailer object or null if no trailer
- */
 function renderTrailer(trailer) {
   const trailerContainer = document.getElementById('trailer-container');
 
@@ -276,10 +246,6 @@ function renderCast(cast) {
   }
 }
 
-/**
- * Renders the similar movies section
- * @param {Array} similarMovies - Array of similar movie objects
- */
 function renderSimilarMovies(similarMovies) {
   const similarMoviesContainer = document.getElementById('similar-movies');
 
