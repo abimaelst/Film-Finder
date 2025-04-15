@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FilmFinder - Discover Your Next Favorite Movie</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@300;400&family=Roboto+Condensed&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="./css/styles.css">
+  <link rel="icon" href="assets/icons/logo.svg">
+</head>
+
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="./assets/icons/logo.png" alt="FilmFinder Logo" class="logo">
+      <h1>FilmFinder</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="watchlist/index.html">My Watchlist</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="search-container">
+    <form id="search-form">
+      <input type="text" id="search-input" placeholder="Search for a movie..." autocomplete="off">
+      <button type="submit" id="search-button">Search</button>
+    </form>
+    <div id="search-suggestions" class="hidden"></div>
+  </div>
+
+  <main>
+    <section class="featured-section">
+      <h2>Trending Movies</h2>
+      <div id="trending-movies" class="movie-grid"></div>
+    </section>
+
+    <section class="genres-section">
+      <h2>Browse by Genre</h2>
+      <div id="genre-filters" class="genre-buttons"></div>
+    </section>
+
+    <section class="filtered-movies-section hidden">
+      <h2 id="filtered-section-title">Movies</h2>
+      <div class="filter-controls">
+        <div class="filter-dropdown">
+          <label for="year-filter">Year:</label>
+          <select id="year-filter">
+            <option value="">All Years</option>
+          </select>
+        </div>
+        <div class="filter-dropdown">
+          <label for="rating-filter">Min Rating:</label>
+          <select id="rating-filter">
+            <option value="">Any Rating</option>
+            <option value="9">9+</option>
+            <option value="8">8+</option>
+            <option value="7">7+</option>
+            <option value="6">6+</option>
+          </select>
+        </div>
+        <div class="filter-dropdown">
+          <label for="sort-by">Sort By:</label>
+          <select id="sort-by">
+            <option value="popularity">Popularity</option>
+            <option value="rating">Rating</option>
+            <option value="year">Release Year</option>
+          </select>
+        </div>
+      </div>
+      <div id="filtered-movies" class="movie-grid"></div>
+      <div class="pagination-controls">
+        <button id="prev-page" disabled>Previous</button>
+        <span id="page-indicator">Page 1</span>
+        <button id="next-page">Next</button>
+      </div>
+    </section>
+
+    <section class="surprise-section">
+      <h2>Can't Decide?</h2>
+      <button id="surprise-me-button">Surprise Me!</button>
+      <div id="surprise-result" class="hidden"></div>
+    </section>
+
+    <section class="recently-viewed-section">
+      <h2>Recently Viewed</h2>
+      <div id="recently-viewed" class="movie-carousel"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 FilmFinder. Movie data provided by <a href="https://www.themoviedb.org/" target="_blank">TMDB</a> and
+      <a href="http://www.omdbapi.com/" target="_blank">OMDB</a>.
+    </p>
+  </footer>
+
+  <script type="module">
+    import { initHome } from './js/MovieList.mjs';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initHome();
+    });
+  </script>
+</body>
+
+</html>

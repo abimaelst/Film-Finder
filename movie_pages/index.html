@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movie Details - FilmFinder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@300;400&family=Roboto+Condensed&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/movie-details.css">
+  <link rel="icon" href="../assets/icons/logo.svg">
+</head>
+
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="../assets/icons/logo.svg" alt="FilmFinder Logo" class="logo">
+      <h1>FilmFinder</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="../watchlist/index.html">My Watchlist</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="search-container">
+    <form id="search-form">
+      <input type="text" id="search-input" placeholder="Search for a movie..." autocomplete="off">
+      <button type="submit" id="search-button">Search</button>
+    </form>
+    <div id="search-suggestions" class="hidden"></div>
+  </div>
+
+  <main>
+    <section id="movie-details-container" class="movie-details-container">
+      <div class="loading-spinner" id="loading-spinner"></div>
+      <!-- Movie details will be populated by JavaScript -->
+    </section>
+
+    <section class="trailer-section">
+      <h2>Trailer</h2>
+      <div id="trailer-container">
+        <!-- Trailer will be populated by JavaScript -->
+      </div>
+    </section>
+
+    <section class="cast-section">
+      <h2>Cast</h2>
+      <div id="cast-list" class="cast-carousel">
+        <!-- Cast will be populated by JavaScript -->
+      </div>
+    </section>
+
+    <section class="similar-movies-section">
+      <h2>Similar Movies You Might Enjoy</h2>
+      <div id="similar-movies" class="movie-carousel">
+        <!-- Similar movies will be populated by JavaScript -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 FilmFinder. Movie data provided by <a href="https://www.themoviedb.org/" target="_blank">TMDB</a> and
+      <a href="http://www.omdbapi.com/" target="_blank">OMDB</a>.
+    </p>
+  </footer>
+
+  <script type="module">
+    import { loadMovieDetails } from '../js/MovieDetails.mjs';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get movie ID from URL parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const movieId = urlParams.get('id');
+
+      if (movieId) {
+        loadMovieDetails(movieId);
+      } else {
+        document.getElementById('movie-details-container').innerHTML = '<p class="error-message">Movie ID not provided. Please go back and select a movie.</p>';
+        document.getElementById('loading-spinner').classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+
+</html>

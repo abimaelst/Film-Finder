@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Watchlist - FilmFinder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@300;400&family=Roboto+Condensed&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+  <link rel="stylesheet" href="../css/watchlist.css">
+  <link rel="icon" href="../assets/icons/logo.svg">
+</head>
+
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="../assets/icons/logo.svg" alt="FilmFinder Logo" class="logo">
+      <h1>FilmFinder</h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="../index.html">Home</a></li>
+        <li><a href="index.html" class="active">My Watchlist</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="search-container">
+    <form id="search-form">
+      <input type="text" id="search-input" placeholder="Search for a movie..." autocomplete="off">
+      <button type="submit" id="search-button">Search</button>
+    </form>
+    <div id="search-suggestions" class="hidden"></div>
+  </div>
+
+  <main>
+    <section class="watchlist-controls">
+      <h2>My Watchlist</h2>
+      <div class="watchlist-filters">
+        <button id="show-all" class="filter-button active">All</button>
+        <button id="show-unwatched" class="filter-button">Unwatched</button>
+        <button id="show-watched" class="filter-button">Watched</button>
+      </div>
+    </section>
+
+    <section id="watchlist-container">
+      <div id="watchlist-movies" class="watchlist-grid">
+        <!-- Watchlist will be populated by JavaScript -->
+      </div>
+      <div id="empty-watchlist" class="hidden">
+        <p>Your watchlist is empty. Start exploring movies and add them to your watchlist!</p>
+        <a href="../index.html" class="cta-button">Discover Movies</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 FilmFinder. Movie data provided by <a href="https://www.themoviedb.org/" target="_blank">TMDB</a> and
+      <a href="http://www.omdbapi.com/" target="_blank">OMDB</a>.
+    </p>
+  </footer>
+
+  <script type="module">
+    import { initWatchlist } from '../js/WatchlistManager.mjs';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initWatchlist();
+    });
+  </script>
+</body>
+
+</html>
